@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Student Progress Dashboard</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      </head>
+      <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .chart-card {
+      background-color: #1f2937;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    canvas {
+      background-color: #111827;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  </style>
+
+<body class="bg-gray-100 dark:bg-gray-900 dark:text-white transition duration-300">
+    <div id="dashboard">
+
+    </div>
+</body>
+<script>
+   
+
+    document.addEventListener("DOMContentLoaded",function (){
+        let dashboard_content = localStorage.getItem("student-dashboard");
+        document.getElementById("dashboard").innerHTML = dashboard_content;
+        let catMarks = JSON.parse(localStorage.getItem("cat-marks"));
+        let assign =  JSON.parse(localStorage.getItem("assignments"));
+        let CAT1 = catMarks.CAT1;
+        console.log(CAT1);
+        const subjectsList = document.getElementById("cat1-subject-marks");
+         CAT1.forEach(sub => {
+         const li = document.createElement("li");
+        li.textContent = `${sub.subject} - ${sub.marks} marks`;
+         subjectsList.appendChild(li);
+         })
+
+         let CAT2 = catMarks.CAT2;
+        console.log(CAT2);
+        const subjectsList2 = document.getElementById("cat2-subject-marks");
+         CAT2.forEach(sub => {
+         const li = document.createElement("li");
+        li.textContent = `${sub.subject} - ${sub.marks} marks`;
+         subjectsList2.appendChild(li);
+         })
+        
+         let CAT3 = catMarks.CAT3;
+        console.log(CAT3);
+        const subjectsList3 = document.getElementById("cat3-subject-marks");
+         CAT3.forEach(sub => {
+         const li = document.createElement("li");
+        li.textContent = `${sub.subject} - ${sub.marks} marks`;
+         subjectsList3.appendChild(li);
+         })
+
+        const assignments = document.getElementById("assignment-marks");
+         assign.forEach(sub => {
+         const li = document.createElement("li");
+        li.textContent = `${sub.subject} - ${sub.marks} marks`;
+         assignments.appendChild(li);
+         })
+
+
+    })
+  
+    document.addEventListener("DOMContentLoaded",function (){
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // Chart.js Performance Chart
+   /* const ctx = document.getElementById('progressChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['CAT I', 'CAT II', 'Model', 'Assignment'],
+        datasets: [{
+          label: 'Software Construction',
+          data: [55, 55, 25, 50],
+          backgroundColor: 'rgba(99, 102, 241, 0.7)',
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });*/
+
+    // CSV Export
+    function exportToCSV() {
+      const rows = [
+        ["Course", "CAT I", "CAT II", "Model", "Assignment"],
+        ["Software Construction", "55", "55", "25", "50"],
+        ["Operating System", "60", "55", "26", "50"],
+        ["Stats & Simulation", "57", "53", "22", "50"],
+      ];
+
+      let csvContent = "data:text/csv;charset=utf-8,"
+        + rows.map(e => e.join(",")).join("\n");
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", "student_progress.csv");
+      document.body.appendChild(link);
+      link.click();
+    }
+})
+
+document.addEventListener("DOMContentLoaded", function () {
+  let catMarks = JSON.parse(localStorage.getItem("cat-marks"));
+  let assign =  JSON.parse(localStorage.getItem("assignments"));
+
+setTimeout(() => {
+ /*const subjects = [
+    { name: "Software Construction", data: [55, 55, 25, 50] },
+    { name: "Operating System", data: [60, 55, 26, 50] },
+    { name: "Stats & Simulation", data: [57, 53, 22, 50] },
+    { name: "Design Thinking", data: [50, 48, 30, 55] }
+  ];*/
+
+  const subjectMap = {};
+
+// Helper to merge marks into subjectMap
+function addMarks(catArray, index) {
+  catArray.forEach(({ subject, marks }) => {
+    if (!subjectMap[subject]) {
+      subjectMap[subject] = Array(4).fill(null); // 4 assessments
+    }
+    subjectMap[subject][index] = marks;
+  });
+}
+
+// Insert data: [CAT1, CAT2, CAT3, Assignment]
+addMarks(catMarks.CAT1, 0);
+addMarks(catMarks.CAT2, 1);
+addMarks(catMarks.CAT3, 2);
+addMarks(assign, 3);
+
+// Convert to chart format
+const subjects = Object.keys(subjectMap).map(subject => ({
+  name: subject,
+  data: subjectMap[subject].map(m => m ?? 0) // Replace nulls with 0
+}));
+
+  const labels = ["CAT I", "CAT II", "Model", "Assignment"];
+
+  subjects.forEach((subject, index) => {
+    const card = document.createElement("div");
+    card.className = "chart-card";
+
+    const title = document.createElement("h2");
+    title.innerText = subject.name;
+
+    const canvas = document.createElement("canvas");
+    canvas.id = `chart-${index}`;
+
+    card.appendChild(title);
+    card.appendChild(canvas);
+    document.getElementById("chartGrid").appendChild(card);
+
+    new Chart(canvas.getContext("2d"), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: subject.name,
+          data: subject.data,
+          backgroundColor: ['#6366f1', '#4f46e5', '#4338ca', '#3730a3'],
+          borderRadius: 5,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: '#374151'
+            }
+          },
+          x: {
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: '#374151'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white'
+            }
+          }
+        }
+      }
+    });
+  });
+}, 50);
+});
+
+</script>
+
+</html>

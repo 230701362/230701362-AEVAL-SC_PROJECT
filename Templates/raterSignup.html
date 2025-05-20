@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .signup-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+        }
+        .signup-container input {
+            width: 90%;
+            padding: 10px;
+            margin:10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .signup-container button {
+            width: 100%;
+            padding: 10px;
+            background: #0b7d2f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .signup-container button:hover {
+            background: #18d85f;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Signup with Academic Eval</h2>
+        <form id="SignupForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="text" id="email" placeholder="email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="number" id="phnumber" placeholder="Phone number" required>
+            <input type="number" id="raterId" placeholder="Rater Id" required>
+
+            <button type="submit">Signup</button>
+        </form>
+    </div>
+    
+</body>
+<script>
+    document.getElementById("SignupForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevents page reload
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const phnumber = document.getElementById("phnumber").value;
+    const email =document.getElementById("email").value;
+    const rid =document.getElementById("raterId").value;
+
+
+    try {
+        const response = await fetch("/signup/rater", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password, phnumber,email,rid}),
+        })
+
+        const data= await response.json();
+        if(response.ok){
+            alert(`signup successfull welcome to Academic Eval ${username} Refresh and login`);
+            window.location.href="/home";
+        }
+        else{
+            alert("signup failed");
+        }
+
+       
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    }
+});
+
+</script>
+</html>

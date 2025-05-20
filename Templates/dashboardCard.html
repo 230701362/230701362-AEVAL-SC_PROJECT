@@ -1,0 +1,88 @@
+
+
+
+
+  <!-- Header -->
+  <header class="bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-indigo-600 dark:text-indigo-300">Student Progress Tracker</h1>
+    <div class="flex items-center gap-4">
+      <button onclick="toggleDarkMode()" class="bg-indigo-600 text-white px-3 py-1 rounded">Toggle Dark Mode</button>
+      <button onclick="exportToCSV()" class="bg-green-600 text-white px-3 py-1 rounded">Export CSV</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex flex-wrap p-6 gap-6">
+
+    <!-- Left Main Info -->
+    <section class="flex-1 min-w-[300px] space-y-6">
+
+      <!-- Predicted GPA -->
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <h2 class="text-lg font-semibold">CGPA:</h2>
+        <p class="text-3xl font-bold text-indigo-700 dark:text-indigo-300">{{%CGPA%}}</p>
+      </div>
+
+      <!-- Marks Cards -->
+      <div class="grid grid-cols-2 gap-4">
+        <!-- CAT I -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">CAT - I</h3>
+          <ul class="mt-2 space-y-1 text-sm" id="cat1-subject-marks">
+            
+          </ul>
+        </div>
+
+        <!-- CAT II -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">CAT - II</h3>
+          <ul class="mt-2 space-y-1 text-sm" id="cat2-subject-marks">
+            
+          </ul>
+        </div>
+
+        <!-- MODEL -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">MODEL</h3>
+          <ul class="mt-2 space-y-1 text-sm" id="cat3-subject-marks">
+            
+          </ul>
+        </div>
+
+        <!-- Assignments -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">ASSIGNMENTS</h3>
+          <ul class="mt-2 space-y-1 text-sm" id="assignment-marks">
+            
+          </ul>
+        </div>
+      </div>
+
+      <!-- Performance Chart -->
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <h3 class="text-lg font-bold mb-2">Performance Chart</h3>
+        <div class="charts-grid" id="chartGrid"></div>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-1/4 space-y-6">
+      <!-- Alerts -->
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">Alerts</h3>
+        <p class="mt-3 text-gray-600 dark:text-gray-300">No new alerts.</p>
+      </div>
+
+      <!-- Notifications -->
+      <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+        <h3 class="text-lg font-bold bg-rose-400 text-white px-2 py-1 rounded">Notifications</h3>
+        <ul class="list-disc list-inside mt-2 text-sm">
+          <li>CAT II marks have been uploaded</li>
+        </ul>
+      </div>
+    </aside>
+
+  </main>
+
+  
+

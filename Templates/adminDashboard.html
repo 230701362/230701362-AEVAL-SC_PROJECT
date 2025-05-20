@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
+
+    #create-as{
+        display:flex;
+        height: 150px;
+        width: 250px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: antiquewhite;
+        border-radius:6px;
+        padding:25px;
+    }
+    #create-as a{
+        background-color: blue;
+        border-radius: 6px;
+        padding: 10px;
+        width: 100px;
+        text-align: center;
+        margin-bottom: 10px;
+        color:white;
+        text-decoration : none;
+    }
+
+</style>
+<body>
+    <div id="create-as">
+        <p style="color:rgb(11, 3, 255);font-weight: bold;">What Action?</p>
+        <a id="student-account" href="#">Create Student</a>
+        <a id="rater-account" href="/sendalert">Send Alerts</a>
+    </div>
+</body>
+
+
+<script>
+    document.getElementById("student-account").addEventListener("click", async () => {
+    const token = localStorage.getItem("adminAuthToken");
+
+    if (!token) {
+        alert("You need to log in as Admin to create students.");
+        window.location.href = "/login/admin"; // Redirect to login
+        return;
+    }
+   
+
+    const response = await fetch("/adminauth", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token // Send token
+        }
+    });
+
+    const data = await response.json();
+
+    if(!(response.ok)) {
+        alert("Error: " + data.error);
+        window.location.href = "/login/admin"; // Redirect if unauthorized
+    }
+    else{
+        alert("authentication successfull");
+        localStorage.setItem("signupPage",data.signupPage)
+        window.location.href = "/signup";
+    }
+});
+</script>
+</html>
